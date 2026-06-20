@@ -1,12 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Playwright;
+using Xunit;
 
 namespace HMCTS_LoginAutomationTests.Tests
 {
-    internal class FixtureTests
+    public class FixtureTests : IAsyncLifetime
     {
+        public IPlaywright Playwright { get; private set; } = default!;
+        public IBrowser Browser { get; private set; } = default!;
+
+        public async Task InitializeAsync()
+        {
+            Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            {
+                Headless = true
+            });
+        }
+
+        public async Task DisposeAsync()
+        {
+            await Browser.CloseAsync();
+            Playwright.Dispose();
+        }
     }
 }
