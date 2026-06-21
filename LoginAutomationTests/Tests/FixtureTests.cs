@@ -19,7 +19,7 @@ namespace HMCTS_LoginAutomationTests.Tests
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = true
+                Headless = false
             });
         }
 

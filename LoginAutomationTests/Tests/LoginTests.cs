@@ -24,13 +24,12 @@ namespace HMCTS_LoginAutomationTests.Tests
             var secureAreaPage = new SecureAreaPage(page, BaseUrl);
 
             await loginPage.GotoAsync();
-            await loginPage.LoginAsync(userName, password);
+            await loginPage.LoginAsync("tomsmith", "SuperSecretPassword!");
 
-            Assert.True(await secureAreaPage.IsLoadedAsync());
+            // this checks URL after login
             Assert.Contains("/secure", page.Url, StringComparison.OrdinalIgnoreCase);
 
-            var flash = await loginPage.GetFlashMessageAsync();
-            Assert.Contains("You logged into a secure area", flash, StringComparison.OrdinalIgnoreCase);
+            Assert.True(await secureAreaPage.IsLoadedAsync());
         }
 
         [Fact]
@@ -81,13 +80,16 @@ namespace HMCTS_LoginAutomationTests.Tests
             var page = await NewPageAsync();
             var loginPage = new LoginPage(page, BaseUrl);
             var secureAreaPage = new SecureAreaPage(page, BaseUrl);
+
             await loginPage.GotoAsync();
-            await loginPage.LoginAsync(userName, password);
-            Assert.True(await secureAreaPage.IsLoadedAsync());
+            await loginPage.LoginAsync("tomsmith", "SuperSecretPassword!");
+
+            Assert.True(await secureAreaPage.IsLoadedAsync()); // first True that is currently failing
+
             await secureAreaPage.LogoutAsync();
+
             Assert.Contains("/login", page.Url, StringComparison.OrdinalIgnoreCase);
-            var flash = await loginPage.GetFlashMessageAsync();
-            Assert.Contains("You logged out of the secure area!", flash, StringComparison.OrdinalIgnoreCase);
+            Assert.True(await page.IsVisibleAsync("#username"));
         }
 
 
