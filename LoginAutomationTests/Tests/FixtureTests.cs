@@ -8,6 +8,12 @@ namespace HMCTS_LoginAutomationTests.Tests
         public IPlaywright Playwright { get; private set; } = default!;
         public IBrowser Browser { get; private set; } = default!;
 
+        public IBrowser GetBrowser()
+        {
+            return Browser;
+        }
+
+        // Implements IAsyncLifetime.InitializeAsync()
         public async Task InitializeAsync()
         {
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
@@ -17,6 +23,7 @@ namespace HMCTS_LoginAutomationTests.Tests
             });
         }
 
+       
         public async Task DisposeAsync()
         {
             await Browser.CloseAsync();
